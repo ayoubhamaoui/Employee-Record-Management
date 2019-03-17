@@ -72,8 +72,8 @@ export class FetchEmployee extends Component{
                         <td>{emp.departement}</td>
                         <td>{emp.city}</td>
                         <td>
-                            <a className="action" onClick={(id) => this.handleEdit(emp.employeeId)}>Edit</a>  |
-                            <a className="action" onClick={(id) => this.handleDelete(emp.employeeId)}>Delete</a>
+                            <button className="action" onClick={(id) => this.handleEdit(emp.employeeId)}>Edit</button> |
+                            <button className="action" onClick={(id) => this.handleDelete(emp.employeeId)}>Delete</button>
                         </td>
                     </tr>
                 )}
