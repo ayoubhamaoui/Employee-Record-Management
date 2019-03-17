@@ -27,11 +27,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\components\AddEmployee.tsx" />
     <None Remove="ClientApp\src\components\FetchData.js" />
+    <None Remove="ClientApp\src\components\FetchEmployee.tsx" />
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\components\AddEmployee.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\FetchData.js" />
+    <TypeScriptCompile Include="ClientApp\src\components\FetchEmployee.tsx" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

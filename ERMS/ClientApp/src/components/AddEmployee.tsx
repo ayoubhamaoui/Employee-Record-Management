@@ -1,13 +1,19 @@
-﻿import React,{ Component } from 'react';
-
-
-export class AddEmployee extends Component{
-    constructor(props) {
+﻿import * as React from 'react';
+import { RouteComponentProps } from 'react-router';
+import { Link, NavLink } from 'react-router-dom';
+import { EmployeeData } from './FetchEmployee';
+interface AddEmployeeDataState {
+    title: string;
+    loading: boolean;
+    cityList: Array<any>;
+    empData: EmployeeData;
+}
+export class AddEmployee extends React.Component<RouteComponentProps<{}>, AddEmployeeDataState> {
+    constructor(props: RouteComponentProps<{}> ) {
         super(props);
-        this.state = {
-            title: "", loading: true, cityList: [], empData: {}};
+        this.state = { title: "", loading: true, cityList: [], empData: new EmployeeData };
         fetch('api/Employee/GetCityList')
-            .then(response => response.json())
+            .then(response => response.json() as Promise<Array<any>>)
             .then(data => {
                 this.setState({ cityList: data });
             });
@@ -15,20 +21,20 @@ export class AddEmployee extends Component{
         // This will set state for Edit employee  
         if (empid > 0) {
             fetch('api/Employee/Details/' + empid)
-                .then(response => response.json())
+                .then(response => response.json() as Promise<EmployeeData>)
                 .then(data => {
                     this.setState({ title: "Edit", loading: false, empData: data });
                 });
         }
         // This will set state for Add employee  
         else {
-            this.state = { title: "Create", loading: false, cityList: [], empData:[]};
+            this.state = { title: "Create", loading: false, cityList: [], empData: new EmployeeData };
         }
         // This binding is necessary to make "this" work in the callback  
         this.handleSave = this.handleSave.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
     }
-    render() {
+    public render() {
         let contents = this.state.loading
             ? <p><em>Loading...</em></p>
             : this.renderCreateForm(this.state.cityList);
@@ -40,7 +46,7 @@ export class AddEmployee extends Component{
         </div>;
     }
     // This will handle the submit form event.  
-    handleSave(event) {
+    private handleSave(event) {
         event.preventDefault();
         const data = new FormData(event.target);
         // PUT request for Edit employee.  
@@ -65,12 +71,12 @@ export class AddEmployee extends Component{
         }
     }
     // This will handle Cancel button click event.  
-    handleCancel(e) {
+    private handleCancel(e) {
         e.preventDefault();
         this.props.history.push("/fetchemployee");
     }
     // Returns the HTML Form to the render() method.  
-    renderCreateForm(cityList) {
+    private renderCreateForm(cityList: Array<any>) {
         return (
             <form onSubmit={this.handleSave} >
                 <div className="form-group row" >
@@ -93,9 +99,9 @@ export class AddEmployee extends Component{
                     </div>
                 </div >
                 <div className="form-group row">
-                    <label className="control-label col-md-12" htmlFor="Department" >Department</label>
+                    <label className="control-label col-md-12" htmlFor="Departement" >Department</label>
                     <div className="col-md-4">
-                        <input className="form-control" type="text" name="Department" defaultValue={this.state.empData.department} required />
+                        <input className="form-control" type="text" name="Departement" defaultValue={this.state.empData.departement} required />
                     </div>
                 </div>
                 <div className="form-group row">

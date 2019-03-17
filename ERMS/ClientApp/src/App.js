@@ -18,6 +18,7 @@ export default class App extends Component {
             <Route path='/fetch-data' component={FetchData} />
             <Route path='/fetchEmployee' component={FetchEmployee} />
             <Route path='/addEmployee' component={AddEmployee} />
+            <Route path='/employee/edit/:empid' component={AddEmployee} />
       </Layout>
     );
   }

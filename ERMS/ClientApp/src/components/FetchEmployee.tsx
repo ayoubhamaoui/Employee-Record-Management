@@ -1,25 +1,28 @@
-﻿import React, { Component } from 'react';
+﻿import * as React from 'react';
+import { RouteComponentProps } from 'react-router';
 import { Link, NavLink } from 'react-router-dom';
 
-export class FetchEmployee extends Component{
-
+interface FetchEmployeeDataState {
+    empList: EmployeeData[];
+    loading: boolean;
+}
+export class FetchEmployee extends React.Component<RouteComponentProps<{}>, FetchEmployeeDataState> {
     constructor(props) {
         super(props);
-
         this.state = { empList: [], loading: true };
-
         fetch('api/Employee/Index')
-            .then(response => response.json())
+            .then(response => response.json() as Promise<EmployeeData[]>)
             .then(data => {
                 this.setState({ empList: data, loading: false });
             });
+        // This binding is necessary to make "this" work in the callback  
+        this.handleDelete = this.handleDelete.bind(this);
+        this.handleEdit = this.handleEdit.bind(this);
     }
-
-    render() {
+    public render() {
         let contents = this.state.loading
             ? <p><em>Loading...</em></p>
             : this.renderEmployeeTable(this.state.empList);
-        console.log(contents);
         return <div>
             <h1>Employee Data</h1>
             <p>This component demonstrates fetching Employee data from the server.</p>
@@ -30,8 +33,8 @@ export class FetchEmployee extends Component{
         </div>;
     }
     // Handle Delete request for an employee  
-    handleDelete(id) {
-        if (!window.confirm("Do you want to delete employee with Id: " + id))
+    private handleDelete(id: number) {
+        if (!confirm("Do you want to delete employee with Id: " + id))
             return;
         else {
             fetch('api/Employee/Delete/' + id, {
@@ -46,11 +49,11 @@ export class FetchEmployee extends Component{
             });
         }
     }
-    handleEdit(id) {
+    private handleEdit(id: number) {
         this.props.history.push("/employee/edit/" + id);
     }
     // Returns the HTML table to the render() method.  
-    renderEmployeeTable(empList) {
+    private renderEmployeeTable(empList: EmployeeData[]) {
         return <table className='table'>
             <thead>
                 <tr>
@@ -72,12 +75,19 @@ export class FetchEmployee extends Component{
                         <td>{emp.departement}</td>
                         <td>{emp.city}</td>
                         <td>
-                            <button className="action" onClick={(id) => this.handleEdit(emp.employeeId)}>Edit</button> |
-                            <button className="action" onClick={(id) => this.handleDelete(emp.employeeId)}>Delete</button>
+                            <a className="action" onClick={(id) => this.handleEdit(emp.employeeId)}>Edit</a>  |
+                            <a className="action" onClick={(id) => this.handleDelete(emp.employeeId)}>Delete</a>
                         </td>
                     </tr>
                 )}
             </tbody>
         </table>;
     }
+}
+export class EmployeeData {
+    employeeId: number = 0;
+    name: string = "";
+    gender: string = "";
+    city: string = "";
+    departement: string = "";
 }
