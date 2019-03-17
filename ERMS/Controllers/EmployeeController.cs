@@ -19,7 +19,7 @@ namespace ERMS.Controllers
         [Route("api/Employee/Index")]
         public IEnumerable<TbEmployee> Index()
         {
-            return objemployee.GetAllEmployees();
+            return objemployee.GetAllEmployees().ToList();
         }
 
         // POST api/<controller>
